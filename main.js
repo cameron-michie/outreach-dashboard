@@ -26,7 +26,6 @@ function createWindow() {
       ? 'http://localhost:3000' // Where create-react-app runs
       : `file://${path.join(__dirname, '../outreach-dashboard/react-dashboard/build/index.html')}` // Path to React build
   );
-  win.webContents.openDevTools();
 
 }
 

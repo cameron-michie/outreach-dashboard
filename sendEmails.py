@@ -12,31 +12,18 @@ def create_message(sender, to, subject, message_html):
     message['to'] = to
     message['from'] = sender
     message['subject'] = subject
+    message['bcc'] = "6939709@bcc.hubspot.com"
     part_html = MIMEText(message_html, 'html')
     message.attach(part_html)
     return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
 
-def main():
+def send_message(email_bodies, email_subjects, to_emails):
     flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
     creds = flow.run_local_server(port=0)
     service = build('gmail', 'v1', credentials=creds)
-
     sender = "cameron.michie@ably.com"
-    to = "cameron.oscar.michie@gmail.com"
-    subject = "Hello from Python!"
-    message_html = """
-    <html>
-        <body>
-            <p>Hi,<br>
-               This is a <b>test email</b> sent from a Python script using the Gmail API with <i>HTML formatting</i>.
-            </p>
-        </body>
-    </html>
-    """
-
-    message = create_message(sender, to, subject, message_html)
-    result = service.users().messages().send(userId="me", body=message).execute()
-    print(f"Message Id: {result['id']}")
-
-if __name__ == '__main__':
-    main()
+    
+    for body, subject, to_email in zip(email_bodies, email_subjects, to_emails):
+        message = create_message(sender, to_email, subject, body)
+        result = service.users().messages().send(userId="me", body=message).execute()
+        print(f"Message Id: {result['id']} - sent to {to_email}.")

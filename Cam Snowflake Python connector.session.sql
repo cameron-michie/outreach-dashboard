@@ -1,6 +1,4 @@
-def info():
-    return """
-    with admin_info as (
+with admin_info as (
         select 
             ably_account_id,
             account_users.user_id ably_user_id,
@@ -135,5 +133,3 @@ def info():
         OR
             icp_intent = 'yes'
         )
-
-    """
