@@ -2,7 +2,6 @@ credentials.json
 outreach-flask-app/*
 react-dashboard/build/*
 react-dashboard/node_modules/*
-!react-dashboard/
 
 node_modules
 __pycache__
