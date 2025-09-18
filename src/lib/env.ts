@@ -51,8 +51,12 @@ export const env = {
 
   // Gmail API
   gmail: {
-    clientId: getEnvVar('GMAIL_CLIENT_ID'),
-    clientSecret: getEnvVar('GMAIL_CLIENT_SECRET'),
+    clientId: getEnvVar('GMAIL_CLIENT_ID', process.env.GOOGLE_CLIENT_ID || ''),
+    clientSecret: getEnvVar('GMAIL_CLIENT_SECRET', process.env.GOOGLE_CLIENT_SECRET || ''),
+    mockMode: getEnvVar('GMAIL_MOCK_MODE', 'true'),
+    dailySendLimit: getEnvVar('GMAIL_DAILY_SEND_LIMIT', '500'),
+    batchSize: getEnvVar('GMAIL_BATCH_SIZE', '10'),
+    delayMs: getEnvVar('GMAIL_DELAY_MS', '1000'),
   },
 
   // Ably
