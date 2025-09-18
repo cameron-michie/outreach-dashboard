@@ -1,0 +1,51 @@
+CLAUDE
+
+Desired outcome
+A webapp which queries Ably's databases for the latest ICP accounts (use the sample queries in the repo as a starting point). Then I want to use the Claude API to write some outreach emails for them. The prompt for this is stored in outreach_prompt.md. These should be stored in the cloud as per the architecture below. The frontend should be a way of displaying
+A) a calendar and timeline of when emails are due to be sent (via gmail API)
+b) the ability to edit emails before they are sent, as well as email subjects, time they should be sent, etc
+c) the ability to query past sent emails and replies (via the HubSpot snowflake data, not using gmail API)
+d) the ability to signin with google, assign ownership to certain emails so they get sent via an assigned users gmail. I have a google cloud project for this but need the ability to share with others.
+e) filter view by google user owner
+
+
+
+Architecture Proposal – Outreach Email Webapp (MongoDB + NextJS)
+Overview
+Overview
+The system is a Next.js application deployed on Vercel. It serves both the frontend and backend through a unified codebase. Outreach emails and metadata are stored in MongoDB Atlas (Free M0 tier), accessed via the Atlas Data API. Ably LiveSync is used to broadcast real-time updates of email state changes back to connected clients. Periodic jobs are executed using Vercel Cron Jobs to trigger scheduled processing (e.g. LLM analysis).
+This architecture emphasizes low operational overhead, real-time interactivity, and cost-effectiveness (free-tier friendly).
+Components
+1. Frontend
+Framework: Next.js (React-based).
+Hosting: Vercel (global CDN, automatic SSL, CI/CD from GitHub).
+Responsibilities:
+UI for creating, viewing, and analyzing outreach emails.
+Subscribes to Ably LiveSync channels to receive live updates (e.g. email status changing from “pending” → “analyzed”).
+Calls backend API routes for CRUD operations.
+2. Backend
+Next.js API Routes (serverless functions hosted on Vercel).
+Responsibilities:
+Handle CRUD operations for emails in MongoDB Atlas.
+Call external APIs (e.g. LLM services) to analyze email content.
+Publish state changes to Ably LiveSync channels for subscribed clients.
+Scheduling:
+Vercel Cron Jobs trigger API routes (e.g. /api/process-daily) once per day.
+Cron routes fetch pending emails, run analysis, store results, and broadcast updates via Ably.
+3. Data Storage
+MongoDB Atlas Free M0 tier (shared cluster).
+Access: Atlas Data API for stateless access from Vercel functions.
+Schema: Emails stored as JSON documents with metadata and analysis results.
+
+4. Real-Time Updates
+Ably LiveSync:
+Clients subscribe to an Ably channel (e.g. emails) via the frontend.
+API routes publish update events (e.g. “email updated”, “analysis complete”) to the channel.
+Connected clients instantly receive updates without polling.
+Workflow
+User visits the webapp → frontend served by Vercel.
+User creates/updates an email → frontend calls /api/email API route.
+API route stores email in MongoDB Atlas via Data API → publishes an “email_created” event to Ably.
+Other clients subscribed to Ably receive the update immediately.
+Daily cron job (/api/process-daily) runs → fetches pending emails, calls LLM APIs, stores analysis in Atlas, and publishes “email_processed” events via Ably.
+Clients subscribed via Ably LiveSync automatically see updated email status and analysis results in real-time.
