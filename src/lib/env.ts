@@ -41,6 +41,12 @@ export const env = {
   // Claude AI
   claude: {
     apiKey: getEnvVar('CLAUDE_API_KEY'),
+    useMock: getEnvVar('CLAUDE_USE_MOCK', 'true'),
+    rateLimitPerMinute: getEnvVar('CLAUDE_RATE_LIMIT_PER_MINUTE', '10'),
+    dailyLimit: getEnvVar('CLAUDE_DAILY_LIMIT', '100'),
+    costWarningThreshold: getEnvVar('CLAUDE_COST_WARNING_THRESHOLD', '5.00'),
+    approvalThreshold: getEnvVar('CLAUDE_APPROVAL_THRESHOLD', '10.00'),
+    mockBalance: getEnvVar('CLAUDE_MOCK_BALANCE', '12.45'),
   },
 
   // Gmail API
