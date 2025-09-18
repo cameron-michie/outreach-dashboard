@@ -7,6 +7,7 @@ A Next.js webapp for automated ICP (Ideal Customer Profile) outreach email campa
 ## Architecture
 
 ### Tech Stack
+
 - **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes (serverless functions)
 - **Database**: MongoDB Atlas (Free M0 tier) + Snowflake (via API)
@@ -16,6 +17,7 @@ A Next.js webapp for automated ICP (Ideal Customer Profile) outreach email campa
 - **AI**: Claude API (Anthropic)
 - **Deployment**: Vercel
 - **Scheduling**: Vercel Cron Jobs
+- **Testing**: Jest, React Testing Library, Playwright, Supertest
 
 ### System Components
 
@@ -81,13 +83,23 @@ outreach-dashboard/
 │   │   └── utils.ts                  # General utilities
 │   ├── types/                        # TypeScript types
 │   └── hooks/                        # Custom React hooks
+├── __tests__/                        # Test files
+│   ├── api/                          # API route tests
+│   ├── components/                   # Component tests
+│   ├── lib/                          # Library/utility tests
+│   ├── e2e/                          # End-to-end tests
+│   ├── __mocks__/                    # Test mocks
+│   └── setup/                        # Test setup files
 ├── public/                           # Static assets
 ├── emails/                           # Generated email storage
 ├── .env.local                        # Environment variables
+├── .env.test                         # Test environment variables
 ├── package.json
 ├── tsconfig.json
 ├── tailwind.config.js
 ├── next.config.js
+├── jest.config.js                    # Jest configuration
+├── playwright.config.ts              # Playwright configuration
 └── vercel.json                       # Vercel configuration
 ```
 
@@ -96,6 +108,7 @@ outreach-dashboard/
 ### MongoDB Collections
 
 #### 1. users
+
 ```typescript
 {
   _id: ObjectId,
@@ -111,6 +124,7 @@ outreach-dashboard/
 ```
 
 #### 2. email_campaigns
+
 ```typescript
 {
   _id: ObjectId,
@@ -156,6 +170,7 @@ outreach-dashboard/
 ```
 
 #### 3. email_templates
+
 ```typescript
 {
   _id: ObjectId,
@@ -170,6 +185,7 @@ outreach-dashboard/
 ```
 
 #### 4. audit_logs
+
 ```typescript
 {
   _id: ObjectId,
@@ -187,6 +203,7 @@ outreach-dashboard/
 ### Phase 1: Project Setup & Core Infrastructure
 
 #### 1.1 Project Initialization
+
 - [ ] Initialize Next.js 14 project with TypeScript
 - [ ] Configure Tailwind CSS
 - [ ] Set up ESLint and Prettier
@@ -194,6 +211,7 @@ outreach-dashboard/
 - [ ] Set up basic project structure
 
 #### 1.2 Database Setup
+
 - [ ] Create MongoDB Atlas cluster (Free M0 tier)
 - [ ] Configure MongoDB connection in Next.js
 - [ ] Create database schemas and models
@@ -201,6 +219,7 @@ outreach-dashboard/
 - [ ] Test database connectivity
 
 #### 1.3 Authentication Setup
+
 - [ ] Configure NextAuth.js with Google OAuth
 - [ ] Set up Google Cloud Project OAuth credentials
 - [ ] Implement @ably.com email domain restriction
@@ -208,6 +227,7 @@ outreach-dashboard/
 - [ ] Build login/logout components
 
 #### 1.4 External Service Integrations
+
 - [ ] Set up Snowflake Node.js driver
 - [ ] Configure Snowflake connection and test queries
 - [ ] Set up Claude AI SDK and test API calls
@@ -218,6 +238,7 @@ outreach-dashboard/
 ### Phase 2: Core API Development
 
 #### 2.1 Snowflake Integration APIs
+
 - [ ] Create `/api/snowflake/icp-accounts` endpoint
 - [ ] Implement the existing ICP query from queries.py
 - [ ] Add filtering and pagination for ICP results
@@ -225,6 +246,7 @@ outreach-dashboard/
 - [ ] Add error handling and connection pooling
 
 #### 2.2 Claude AI Integration
+
 - [ ] Create `/api/claude/generate-emails` endpoint
 - [ ] Implement the research phase (external website analysis)
 - [ ] Build email generation logic following the 4-email sequence
@@ -232,6 +254,7 @@ outreach-dashboard/
 - [ ] Implement retry logic and rate limiting
 
 #### 2.3 Gmail API Integration
+
 - [ ] Create `/api/gmail/send` endpoint for individual emails
 - [ ] Implement batch email sending functionality
 - [ ] Add email status tracking and delivery confirmation
@@ -239,6 +262,7 @@ outreach-dashboard/
 - [ ] Implement proper OAuth token refresh handling
 
 #### 2.4 Email Campaign Management
+
 - [ ] Create `/api/emails/campaigns` CRUD endpoints
 - [ ] Implement campaign creation workflow
 - [ ] Add email scheduling logic
@@ -248,6 +272,7 @@ outreach-dashboard/
 ### Phase 3: Frontend Development
 
 #### 3.1 Core UI Components
+
 - [ ] Build reusable UI components (Button, Input, Modal, etc.)
 - [ ] Create layout components (Header, Sidebar, Navigation)
 - [ ] Implement responsive design system
@@ -255,6 +280,7 @@ outreach-dashboard/
 - [ ] Create data table components for campaign lists
 
 #### 3.2 Dashboard Pages
+
 - [ ] Build main dashboard with campaign overview
 - [ ] Create ICP accounts list with filtering
 - [ ] Implement campaign creation flow
@@ -262,6 +288,7 @@ outreach-dashboard/
 - [ ] Build settings page for approval preferences
 
 #### 3.3 Calendar Interface
+
 - [ ] Implement calendar view for scheduled emails
 - [ ] Add date picker for scheduling emails
 - [ ] Create timeline view for email sequences
@@ -269,6 +296,7 @@ outreach-dashboard/
 - [ ] Add calendar export functionality
 
 #### 3.4 Email Management Interface
+
 - [ ] Build email editor with rich text support
 - [ ] Create email preview components
 - [ ] Implement approval workflow UI
@@ -278,6 +306,7 @@ outreach-dashboard/
 ### Phase 4: Real-time Features & Automation
 
 #### 4.1 Ably LiveSync Integration
+
 - [ ] Configure Ably channels for real-time updates
 - [ ] Implement real-time campaign status updates
 - [ ] Add live email queue monitoring
@@ -285,6 +314,7 @@ outreach-dashboard/
 - [ ] Add collaborative editing features
 
 #### 4.2 Cron Jobs & Automation
+
 - [ ] Create `/api/cron/daily-email-check` endpoint
 - [ ] Implement email queue processing logic
 - [ ] Add automatic email generation for new ICP accounts
@@ -292,6 +322,7 @@ outreach-dashboard/
 - [ ] Implement monitoring and alerting for failed jobs
 
 #### 4.3 Approval Workflow
+
 - [ ] Build approval request system
 - [ ] Create email notifications for pending approvals
 - [ ] Implement bulk approval functionality
@@ -301,6 +332,7 @@ outreach-dashboard/
 ### Phase 5: Advanced Features
 
 #### 5.1 Analytics & Reporting
+
 - [ ] Build email performance analytics
 - [ ] Create campaign success metrics
 - [ ] Implement response tracking (via HubSpot data)
@@ -308,6 +340,7 @@ outreach-dashboard/
 - [ ] Build executive summary reports
 
 #### 5.2 Template Management
+
 - [ ] Create email template editor
 - [ ] Implement template versioning
 - [ ] Add A/B testing for email templates
@@ -315,6 +348,7 @@ outreach-dashboard/
 - [ ] Create template sharing between users
 
 #### 5.3 Advanced Filtering & Search
+
 - [ ] Implement advanced ICP filtering
 - [ ] Add full-text search for campaigns
 - [ ] Create saved filter presets
@@ -324,6 +358,7 @@ outreach-dashboard/
 ### Phase 6: Deployment & Production
 
 #### 6.1 Production Setup
+
 - [ ] Configure Vercel deployment settings
 - [ ] Set up production environment variables
 - [ ] Configure custom domain
@@ -331,6 +366,7 @@ outreach-dashboard/
 - [ ] Configure CDN and performance optimization
 
 #### 6.2 Monitoring & Logging
+
 - [ ] Implement application logging
 - [ ] Set up error tracking (Sentry)
 - [ ] Configure performance monitoring
@@ -338,6 +374,7 @@ outreach-dashboard/
 - [ ] Create uptime monitoring
 
 #### 6.3 Security & Compliance
+
 - [ ] Implement rate limiting
 - [ ] Add CSRF protection
 - [ ] Configure security headers
@@ -345,6 +382,7 @@ outreach-dashboard/
 - [ ] Add data encryption for sensitive fields
 
 #### 6.4 Testing & Quality Assurance
+
 - [ ] Write unit tests for API endpoints
 - [ ] Create integration tests for email workflows
 - [ ] Add end-to-end tests for critical user journeys
@@ -390,6 +428,7 @@ ADMIN_EMAILS=admin@ably.com,manager@ably.com
 ## Key Features Summary
 
 ### Core Functionality
+
 1. **ICP Account Discovery**: Query Snowflake for new ICP accounts based on existing criteria
 2. **AI Email Generation**: Use Claude AI to research companies and generate personalized 4-email sequences
 3. **Email Scheduling**: Calendar-based scheduling with automated sending via cron jobs
@@ -398,6 +437,7 @@ ADMIN_EMAILS=admin@ably.com,manager@ably.com
 6. **Gmail Integration**: Send emails through users' Gmail accounts with proper authentication
 
 ### User Experience
+
 1. **Dashboard**: Overview of all campaigns, pending approvals, and scheduled emails
 2. **Calendar View**: Visual timeline of email sequences and scheduling
 3. **Email Editor**: Rich text editing with preview functionality
@@ -405,6 +445,7 @@ ADMIN_EMAILS=admin@ably.com,manager@ably.com
 5. **Analytics**: Performance tracking and campaign success metrics
 
 ### Technical Excellence
+
 1. **Type Safety**: Full TypeScript implementation
 2. **Performance**: Optimized queries and caching strategies
 3. **Security**: OAuth authentication with domain restrictions
@@ -429,4 +470,4 @@ ADMIN_EMAILS=admin@ably.com,manager@ably.com
 
 ---
 
-*This project plan provides a comprehensive roadmap for building a production-ready outreach email automation platform. Each phase builds upon the previous one, ensuring a solid foundation while delivering incremental value.*
+_This project plan provides a comprehensive roadmap for building a production-ready outreach email automation platform. Each phase builds upon the previous one, ensuring a solid foundation while delivering incremental value._
