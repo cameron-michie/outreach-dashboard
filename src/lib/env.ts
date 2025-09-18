@@ -31,10 +31,11 @@ export const env = {
   snowflake: {
     account: getEnvVar('SNOWFLAKE_ACCOUNT'),
     username: getEnvVar('SNOWFLAKE_USERNAME'),
-    password: getEnvVar('SNOWFLAKE_PASSWORD'),
+    password: process.env.SNOWFLAKE_PASSWORD || '', // Optional for external browser auth
     warehouse: getEnvVar('SNOWFLAKE_WAREHOUSE'),
     database: getEnvVar('SNOWFLAKE_DATABASE', 'ABLY_ANALYTICS_PRODUCTION'),
     schema: getEnvVar('SNOWFLAKE_SCHEMA', 'MODELLED_COMMERCIAL'),
+    authenticator: getEnvVar('SNOWFLAKE_AUTHENTICATOR', 'externalbrowser'),
   },
 
   // Claude AI
