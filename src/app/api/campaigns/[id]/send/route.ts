@@ -3,11 +3,12 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { CampaignModel, AuditLogModel } from '@/lib/models';
 import { GmailService, EmailToSend } from '@/lib/gmail-service';
+import { GeneratedEmail } from '@/types/common';
 import { ObjectId } from 'mongodb';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -24,15 +25,14 @@ export async function POST(
       dry_run = false
     } = body;
 
-    console.log(`📬 Sending campaign ${params.id} (dry_run: ${dry_run})`);
+    const { id } = await params;
+    console.log(`📬 Sending campaign ${id} (dry_run: ${dry_run})`);
 
     // Get campaign
-    const campaign = await CampaignModel.findOne({
-      _id: new ObjectId(params.id),
-      user_id: session.user.id
-    });
+    const campaign = await CampaignModel.findById(id);
 
-    if (!campaign) {
+    // Add user authorization check separately
+    if (!campaign || campaign.user_id !== session.user.id) {
       return NextResponse.json(
         { error: 'Campaign not found or access denied' },
         { status: 404 }
@@ -60,13 +60,13 @@ export async function POST(
     }
 
     // Filter emails to send
-    let emailsToSend = campaign.generated_emails.filter((email: any) =>
+    let emailsToSend = campaign.generated_emails.filter((email: GeneratedEmail) =>
       email.status === 'draft' || email.status === 'scheduled'
     );
 
     // Apply sequence filter if specified
     if (filter_sequences.length > 0) {
-      emailsToSend = emailsToSend.filter((email: any) =>
+      emailsToSend = emailsToSend.filter((email: GeneratedEmail) =>
         filter_sequences.includes(email.sequence)
       );
     }
@@ -79,12 +79,12 @@ export async function POST(
     }
 
     // Prepare emails for Gmail service
-    const gmailEmails: EmailToSend[] = emailsToSend.map((email: any) => ({
-      to: email.variables_used?.contact_email || 'unknown@example.com',
+    const gmailEmails: EmailToSend[] = emailsToSend.map((email: GeneratedEmail) => ({
+      to: email.to_email || 'unknown@example.com',
       subject: email.subject,
       content: email.content,
       account_id: email.account_id,
-      campaign_id: params.id,
+      campaign_id: id,
       sequence: email.sequence,
       scheduled_date: email.scheduled_date ? new Date(email.scheduled_date) : undefined
     }));
@@ -146,7 +146,7 @@ export async function POST(
     });
 
     // Update campaign with send results
-    const updatedEmails = campaign.generated_emails.map((email: any) => {
+    const updatedEmails = campaign.generated_emails.map((email: GeneratedEmail) => {
       const sendResultForEmail = sendResult.results.find(
         r => r.account_id === email.account_id && r.sequence === email.sequence
       );
@@ -166,36 +166,30 @@ export async function POST(
     });
 
     // Update campaign status
-    const totalSent = updatedEmails.filter((e: any) => e.status === 'sent').length;
+    const totalSent = updatedEmails.filter((e: GeneratedEmail) => e.status === 'sent').length;
     const totalEmails = updatedEmails.length;
     const newStatus = totalSent === totalEmails ? 'completed' :
                      totalSent > 0 ? 'partially_sent' : 'failed';
 
-    await CampaignModel.findOneAndUpdate(
-      { _id: new ObjectId(params.id) },
-      {
-        $set: {
-          generated_emails: updatedEmails,
-          status: newStatus,
-          send_metadata: {
-            last_send_at: new Date(),
-            total_sent: sendResult.total_sent,
-            total_failed: sendResult.total_failed,
-            send_time: sendResult.send_time,
-            gmail_cost: sendResult.total_cost,
-            sent_by: session.user.email
-          },
-          updated_at: new Date()
-        }
+    await CampaignModel.update(id, {
+      generated_emails: updatedEmails,
+      status: newStatus,
+      send_metadata: {
+        last_send_at: new Date(),
+        total_sent: sendResult.total_sent,
+        total_failed: sendResult.total_failed,
+        send_time: sendResult.send_time,
+        gmail_cost: sendResult.total_cost,
+        sent_by: session.user.email
       }
-    );
+    });
 
     // Log the send operation
     await AuditLogModel.logAction(
       session.user.id,
       'campaign_emails_sent',
       'campaign',
-      params.id,
+      id,
       {
         emails_sent: sendResult.total_sent,
         emails_failed: sendResult.total_failed,
@@ -207,7 +201,7 @@ export async function POST(
 
     const response = {
       success: true,
-      campaign_id: params.id,
+      campaign_id: id,
       send_results: {
         total_sent: sendResult.total_sent,
         total_failed: sendResult.total_failed,
@@ -245,7 +239,7 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -253,13 +247,12 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     // Get campaign and send status
-    const campaign = await CampaignModel.findOne({
-      _id: new ObjectId(params.id),
-      user_id: session.user.id
-    });
+    const campaign = await CampaignModel.findById(id);
 
-    if (!campaign) {
+    // Add user authorization check separately
+    if (!campaign || campaign.user_id !== session.user.id) {
       return NextResponse.json(
         { error: 'Campaign not found or access denied' },
         { status: 404 }
@@ -274,28 +267,28 @@ export async function GET(
     const emails = campaign.generated_emails || [];
     const sendStatus = {
       total_emails: emails.length,
-      draft: emails.filter((e: any) => e.status === 'draft').length,
-      scheduled: emails.filter((e: any) => e.status === 'scheduled').length,
-      sent: emails.filter((e: any) => e.status === 'sent').length,
-      failed: emails.filter((e: any) => e.status === 'failed').length
+      draft: emails.filter((e: GeneratedEmail) => e.status === 'draft').length,
+      scheduled: emails.filter((e: GeneratedEmail) => e.status === 'scheduled').length,
+      sent: emails.filter((e: GeneratedEmail) => e.status === 'sent').length,
+      failed: emails.filter((e: GeneratedEmail) => e.status === 'failed').length
     };
 
     // Find next scheduled emails
     const now = new Date();
     const nextScheduled = emails
-      .filter((e: any) => e.status === 'scheduled' && e.scheduled_date && new Date(e.scheduled_date) > now)
-      .sort((a: any, b: any) => new Date(a.scheduled_date).getTime() - new Date(b.scheduled_date).getTime())
+      .filter((e: GeneratedEmail) => e.status === 'scheduled' && e.scheduled_date && new Date(e.scheduled_date) > now)
+      .sort((a: GeneratedEmail, b: GeneratedEmail) => new Date(a.scheduled_date!).getTime() - new Date(b.scheduled_date!).getTime())
       .slice(0, 5);
 
     const response = {
       success: true,
-      campaign_id: params.id,
+      campaign_id: id,
       campaign_status: campaign.status,
       send_status: sendStatus,
       ready_to_send: sendStatus.draft + sendStatus.scheduled,
       gmail_connection: gmailStatus,
       gmail_limits: gmailLimits,
-      next_scheduled: nextScheduled.map((e: any) => ({
+      next_scheduled: nextScheduled.map((e: GeneratedEmail) => ({
         account_id: e.account_id,
         sequence: e.sequence,
         scheduled_date: e.scheduled_date,

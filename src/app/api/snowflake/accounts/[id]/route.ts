@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { executeSnowflakeQuery } from '@/lib/snowflake';
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteContext) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     const accountId = parseInt(id);
 
     if (isNaN(accountId)) {

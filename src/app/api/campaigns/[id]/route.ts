@@ -5,7 +5,7 @@ import { CampaignModel, AuditLogModel } from '@/lib/models';
 import { ObjectId } from 'mongodb';
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteContext) {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid campaign ID' }, { status: 400 });
@@ -23,12 +23,10 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
 
     console.log(`🔍 Fetching campaign ${id} for ${session.user.email}`);
 
-    const campaign = await CampaignModel.findOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    const campaign = await CampaignModel.findById(id);
 
-    if (!campaign) {
+    // Add user authorization check separately
+    if (!campaign || campaign.user_id !== session.user.id) {
       return NextResponse.json({ error: 'Campaign not found' }, { status: 404 });
     }
 
@@ -54,7 +52,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid campaign ID' }, { status: 400 });
@@ -65,12 +63,10 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
 
     console.log(`📝 Updating campaign ${id} for ${session.user.email}`);
 
-    const existingCampaign = await CampaignModel.findOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    const existingCampaign = await CampaignModel.findById(id);
 
-    if (!existingCampaign) {
+    // Add user authorization check separately
+    if (!existingCampaign || existingCampaign.user_id !== session.user.id) {
       return NextResponse.json({ error: 'Campaign not found' }, { status: 404 });
     }
 
@@ -82,7 +78,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       );
     }
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updated_at: new Date()
     };
 
@@ -95,11 +91,10 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       updateData.email_count = target_accounts.length;
     }
 
-    const campaign = await CampaignModel.findOneAndUpdate(
-      { _id: new ObjectId(id), user_id: session.user.id },
-      { $set: updateData },
-      { returnDocument: 'after' }
-    );
+    await CampaignModel.update(id, updateData);
+
+    // Get the updated campaign
+    const campaign = await CampaignModel.findById(id);
 
     // Log the update
     await AuditLogModel.logAction(
@@ -132,7 +127,7 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid campaign ID' }, { status: 400 });
@@ -140,12 +135,10 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
 
     console.log(`🗑️ Deleting campaign ${id} for ${session.user.email}`);
 
-    const campaign = await CampaignModel.findOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    const campaign = await CampaignModel.findById(id);
 
-    if (!campaign) {
+    // Add user authorization check separately
+    if (!campaign || campaign.user_id !== session.user.id) {
       return NextResponse.json({ error: 'Campaign not found' }, { status: 404 });
     }
 
@@ -157,10 +150,7 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
       );
     }
 
-    await CampaignModel.deleteOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    await CampaignModel.delete(id);
 
     // Log the deletion
     await AuditLogModel.logAction(

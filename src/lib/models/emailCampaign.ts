@@ -149,3 +149,5 @@ export class EmailCampaignModel {
     }));
   }
 }
+
+export { EmailCampaignModel };

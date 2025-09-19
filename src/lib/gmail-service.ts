@@ -238,7 +238,13 @@ export class GmailService {
   static async checkGmailConnection(): Promise<{
     connected: boolean;
     error?: string;
-    profile?: any;
+    profile?: {
+      emailAddress?: string;
+      messagesTotal?: number;
+      threadsTotal?: number;
+      historyId?: string;
+      mock_mode?: boolean;
+    };
   }> {
     try {
       if (process.env.GMAIL_MOCK_MODE === 'true') {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { CampaignModel } from '@/lib/models';
-
+import { EmailCampaignModel } from '@/lib/models';
+ 
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (template) {
-      filters.template_id = template;
+      // filters.template_id = template;
     }
 
     if (startDate || endDate) {
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const campaigns = await CampaignModel.findPaginated(filters, page, limit);
+    const campaigns = await EmailCampaignModel.findPaginated(filters, page, limit);
 
     console.log(`✅ Retrieved ${campaigns.data.length} campaigns (${campaigns.total} total)`);
 
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       replied_count: 0,
     };
 
-    const campaign = await CampaignModel.create(campaignData);
+    const campaign = await EmailCampaignModel.create(campaignData);
 
     console.log(`✅ Campaign created with ID: ${campaign._id}`);
 

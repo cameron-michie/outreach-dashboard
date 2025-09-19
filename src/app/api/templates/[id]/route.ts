@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { TemplateModel, AuditLogModel } from '@/lib/models';
+import { UpdateData } from '@/types/common';
 import { ObjectId } from 'mongodb';
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteContext) {
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid template ID' }, { status: 400 });
@@ -23,12 +24,10 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
 
     console.log(`🔍 Fetching template ${id} for ${session.user.email}`);
 
-    const template = await TemplateModel.findOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    const template = await TemplateModel.findById(id);
 
-    if (!template) {
+    // Add user authorization check separately
+    if (!template || template.user_id !== session.user.id) {
       return NextResponse.json({ error: 'Template not found' }, { status: 404 });
     }
 
@@ -54,7 +53,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid template ID' }, { status: 400 });
@@ -65,7 +64,7 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
 
     console.log(`📝 Updating template ${id} for ${session.user.email}`);
 
-    const updateData: any = {
+    const updateData: UpdateData = {
       updated_at: new Date()
     };
 
@@ -76,15 +75,16 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
     if (category !== undefined) updateData.category = category;
     if (variables !== undefined) updateData.variables = variables;
 
-    const template = await TemplateModel.findOneAndUpdate(
-      { _id: new ObjectId(id), user_id: session.user.id },
-      { $set: updateData },
-      { returnDocument: 'after' }
-    );
-
-    if (!template) {
+    // First check if template exists and user has access
+    const existingTemplate = await TemplateModel.findById(id);
+    if (!existingTemplate || existingTemplate.user_id !== session.user.id) {
       return NextResponse.json({ error: 'Template not found' }, { status: 404 });
     }
+
+    await TemplateModel.update(id, updateData);
+
+    // Get the updated template
+    const template = await TemplateModel.findById(id);
 
     // Log the update
     await AuditLogModel.logAction(
@@ -117,7 +117,7 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid template ID' }, { status: 400 });
@@ -125,19 +125,14 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
 
     console.log(`🗑️ Deleting template ${id} for ${session.user.email}`);
 
-    const template = await TemplateModel.findOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    const template = await TemplateModel.findById(id);
 
-    if (!template) {
+    // Add user authorization check separately
+    if (!template || template.user_id !== session.user.id) {
       return NextResponse.json({ error: 'Template not found' }, { status: 404 });
     }
 
-    await TemplateModel.deleteOne({
-      _id: new ObjectId(id),
-      user_id: session.user.id
-    });
+    await TemplateModel.delete(id);
 
     // Log the deletion
     await AuditLogModel.logAction(

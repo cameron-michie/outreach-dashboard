@@ -34,10 +34,20 @@ export interface TemplateVariables {
   total_emails?: number;
 }
 
+export interface ResearchData {
+  tech_stack?: string[];
+  recent_news?: string[];
+  pain_points?: string[];
+  industry?: string;
+  company_size?: string;
+  company_overview?: string;
+  sources?: string[];
+}
+
 export interface TemplateContext {
   variables: TemplateVariables;
   account_data: ICPAccount;
-  research_data?: any;
+  research_data?: ResearchData;
   user_data: {
     name: string;
     email: string;
@@ -113,7 +123,7 @@ export class TemplateEngine {
     account: ICPAccount,
     userData: { name: string; email: string },
     sequenceNumber: number,
-    researchData?: any
+    researchData?: ResearchData
   ): TemplateContext {
     const accountVariables = this.extractAccountVariables(account);
 
@@ -295,14 +305,15 @@ export class TemplateEngine {
     return '2x faster development';
   }
 
-  private static formatArray(value: any[], variableName: string): string {
+  private static formatArray(value: unknown[], variableName: string): string {
+    const stringArray = value.map(item => String(item));
     if (variableName === 'tech_stack') {
-      return value.join(', ');
+      return stringArray.join(', ');
     }
     if (variableName === 'recent_news' || variableName === 'pain_points') {
-      return value.slice(0, 2).join(' and '); // Show only first 2 items
+      return stringArray.slice(0, 2).join(' and '); // Show only first 2 items
     }
-    return value.join(', ');
+    return stringArray.join(', ');
   }
 
   private static formatNumber(value: number, variableName: string): string {

@@ -1,14 +1,15 @@
 import snowflake from 'snowflake-sdk';
 import { env } from './env';
+import { SnowflakeConnection as BaseSnowflakeConnection, SnowflakeError, SnowflakeStatement } from '@/types/common';
 
-interface SnowflakeConnection {
-  connection: any;
+interface SnowflakeConnectionWrapper {
+  connection: BaseSnowflakeConnection;
   isConnected: boolean;
 }
 
-let globalConnection: SnowflakeConnection | null = null;
+let globalConnection: SnowflakeConnectionWrapper | null = null;
 
-export async function getSnowflakeConnection(): Promise<any> {
+export async function getSnowflakeConnection(): Promise<BaseSnowflakeConnection> {
   if (globalConnection?.isConnected) {
     return globalConnection.connection;
   }
@@ -24,9 +25,9 @@ export async function getSnowflakeConnection(): Promise<any> {
   });
 
   // Use connectAsync for external browser authenticator
-  return new Promise((resolve, reject) => {
+  return new Promise<BaseSnowflakeConnection>((resolve, reject) => {
     if (env.snowflake.authenticator === 'externalbrowser') {
-      connection.connectAsync((err: any, conn: any) => {
+      connection.connectAsync((err: SnowflakeError | null, conn: BaseSnowflakeConnection) => {
         if (err) {
           console.error('Failed to connect to Snowflake:', err);
           reject(err);
@@ -41,7 +42,7 @@ export async function getSnowflakeConnection(): Promise<any> {
         resolve(conn);
       });
     } else {
-      connection.connect((err: any, conn: any) => {
+      connection.connect((err: SnowflakeError | null, conn: BaseSnowflakeConnection) => {
         if (err) {
           console.error('Failed to connect to Snowflake:', err);
           reject(err);
@@ -59,13 +60,13 @@ export async function getSnowflakeConnection(): Promise<any> {
   });
 }
 
-export async function executeSnowflakeQuery<T = any>(query: string): Promise<T[]> {
+export async function executeSnowflakeQuery<T = unknown>(query: string): Promise<T[]> {
   const connection = await getSnowflakeConnection();
 
-  return new Promise((resolve, reject) => {
+  return new Promise<T[]>((resolve, reject) => {
     connection.execute({
       sqlText: query,
-      complete: (err: any, stmt: any, rows: any[]) => {
+      complete: (err: SnowflakeError | null, stmt: SnowflakeStatement, rows: unknown[]) => {
         if (err) {
           console.error('Snowflake query error:', err);
           reject(err);
@@ -73,7 +74,7 @@ export async function executeSnowflakeQuery<T = any>(query: string): Promise<T[]
         }
 
         console.log(`✅ Snowflake query executed successfully, returned ${rows?.length || 0} rows`);
-        resolve(rows || []);
+        resolve((rows || []) as T[]);
       },
     });
   });
@@ -81,8 +82,8 @@ export async function executeSnowflakeQuery<T = any>(query: string): Promise<T[]
 
 export async function closeSnowflakeConnection(): Promise<void> {
   if (globalConnection?.isConnected) {
-    return new Promise((resolve) => {
-      globalConnection!.connection.destroy((err: any, conn: any) => {
+    return new Promise<void>((resolve) => {
+      globalConnection!.connection.destroy((err: SnowflakeError | null, conn: BaseSnowflakeConnection) => {
         if (err) {
           console.error('Error closing Snowflake connection:', err);
         } else {
