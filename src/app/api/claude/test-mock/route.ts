@@ -142,7 +142,13 @@ export async function POST(request: NextRequest) {
 
     console.log('🧪 Running custom Claude tests...');
 
-    const results: any = {
+    const results: {
+      success: boolean;
+      tests_run: string[];
+      timestamp: string;
+      email_generation?: unknown;
+      company_research?: unknown;
+    } = {
       success: true,
       tests_run: [],
       timestamp: new Date().toISOString()

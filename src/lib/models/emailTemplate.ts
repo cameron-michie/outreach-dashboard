@@ -106,3 +106,5 @@ export class EmailTemplateModel {
     return await collection.deleteOne({ _id: new ObjectId(id) });
   }
 }
+
+export { EmailTemplateModel };

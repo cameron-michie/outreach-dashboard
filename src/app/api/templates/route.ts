@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { TemplateModel } from '@/lib/models';
+import { DatabaseFilter } from '@/types/common';
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     console.log(`🔍 Fetching templates for ${session.user.email} - Page ${page}, Limit ${limit}`);
 
-    const filters: any = { user_id: session.user.id };
+    const filters: DatabaseFilter = { user_id: session.user.id };
 
     if (category) {
       filters.category = category;
@@ -32,7 +33,20 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    const templates = await TemplateModel.findPaginated(filters, page, limit);
+    // Use findAll with manual pagination since findPaginated doesn't exist
+    const allTemplates = await TemplateModel.findAll(filters);
+
+    // Manual pagination
+    const skip = (page - 1) * limit;
+    const data = allTemplates.slice(skip, skip + limit);
+    const total = allTemplates.length;
+    const templates = {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    };
 
     console.log(`✅ Retrieved ${templates.data.length} templates (${templates.total} total)`);
 

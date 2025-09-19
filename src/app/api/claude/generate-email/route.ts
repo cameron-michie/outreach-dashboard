@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     const account = accountData[0];
 
     // Get template data
-    const template = await TemplateModel.findOne({ _id: new ObjectId(template_id) });
+    const template = await TemplateModel.findById(template_id);
     if (!template) {
       return NextResponse.json(
         { error: 'Template not found' },

@@ -5,6 +5,7 @@ import { ClaudeCostManager } from '@/lib/claude-cost-manager';
 import { TemplateEngine } from '@/lib/template-engine';
 import { executeSnowflakeQuery } from '@/lib/snowflake';
 import { CampaignModel, TemplateModel, AuditLogModel } from '@/lib/models';
+import { GeneratedEmail } from '@/types/common';
 import { ObjectId } from 'mongodb';
 
 export async function POST(request: NextRequest) {
@@ -88,12 +89,10 @@ export async function POST(request: NextRequest) {
     ClaudeCostManager.recordRequest(session.user.id);
 
     // Get campaign
-    const campaign = await CampaignModel.findOne({
-      _id: new ObjectId(campaign_id),
-      user_id: session.user.id
-    });
+    const campaign = await CampaignModel.findById(campaign_id);
 
-    if (!campaign) {
+    // Add user authorization check separately
+    if (!campaign || campaign.user_id !== session.user.id) {
       return NextResponse.json(
         { error: 'Campaign not found or access denied' },
         { status: 404 }
@@ -101,7 +100,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get template
-    const template = await TemplateModel.findOne({ _id: new ObjectId(template_id) });
+    const template = await TemplateModel.findById(template_id);
     if (!template) {
       return NextResponse.json(
         { error: 'Template not found' },
@@ -151,7 +150,7 @@ export async function POST(request: NextRequest) {
     // Determine if we should use mock or real Claude API
     const shouldUseMock = use_mock !== false && ClaudeCostManager.isMockMode();
 
-    const generatedEmails: any[] = [];
+    const generatedEmails: GeneratedEmail[] = [];
     let totalCost = 0;
     const startTime = Date.now();
 
@@ -237,24 +236,18 @@ export async function POST(request: NextRequest) {
     // Update campaign with generated emails
     const successfulEmails = generatedEmails.filter(email => email.status !== 'failed');
 
-    await CampaignModel.findOneAndUpdate(
-      { _id: new ObjectId(campaign_id) },
-      {
-        $set: {
-          generated_emails: generatedEmails,
-          generation_metadata: {
-            total_cost: totalCost,
-            generation_time: generationTime,
-            claude_model: shouldUseMock ? 'mock' : 'claude-3-sonnet',
-            generated_at: new Date(),
-            generated_by: session.user.email,
-            template_used: template_id
-          },
-          status: successfulEmails.length > 0 ? 'generated' : 'failed',
-          updated_at: new Date()
-        }
-      }
-    );
+    await CampaignModel.update(campaign_id, {
+      generated_emails: generatedEmails,
+      generation_metadata: {
+        total_cost: totalCost,
+        generation_time: generationTime,
+        claude_model: shouldUseMock ? 'mock' : 'claude-3-sonnet',
+        generated_at: new Date(),
+        generated_by: session.user.email,
+        template_used: template_id
+      },
+      status: successfulEmails.length > 0 ? 'generated' : 'failed'
+    });
 
     // Log the operation
     await AuditLogModel.logAction(

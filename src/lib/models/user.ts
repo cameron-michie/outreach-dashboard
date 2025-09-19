@@ -95,3 +95,5 @@ export class UserModel {
     return user?.role === 'admin';
   }
 }
+
+export { UserModel };

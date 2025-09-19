@@ -209,7 +209,11 @@ export class ClaudeCostManager {
   /**
    * Generate mock response for development
    */
-  static generateMockEmail(accountData: any, templateData: any, sequence: number): {
+  static generateMockEmail(
+    accountData: { company_name?: string; contact_name?: string; industry?: string; sign_in_count?: number; use_case?: string },
+    templateData: { subject_template?: string; content_template?: string },
+    sequence: number
+  ): {
     subject: string;
     content: string;
     generation_time: number;
