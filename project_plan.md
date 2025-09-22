@@ -199,6 +199,25 @@ outreach-dashboard/
 }
 ```
 
+## Recent Updates
+
+### shadcn/ui Design System Migration (September 2025)
+
+- **Completed**: Migrated from custom CSS styling to shadcn/ui design system
+- **Components Updated**:
+  - Created `table.tsx`, `checkbox.tsx`, `dropdown-menu.tsx` components
+  - Updated `TnksDataTable` component to use shadcn Table primitives
+  - Updated `CampaignTable` to inherit shadcn styling through TnksDataTable
+  - Replaced native HTML table elements with shadcn components
+  - Updated sort icons to use Lucide React icons
+- **Dependencies Added**:
+  - `@radix-ui/react-checkbox`
+  - `@radix-ui/react-dropdown-menu`
+  - `@radix-ui/react-slot`
+  - `class-variance-authority`
+  - `lucide-react`
+- **Benefits**: Improved visual consistency, better accessibility, modern design system, responsive tables
+
 ## Implementation TODOs
 
 ### Phase 1: Project Setup & Core Infrastructure

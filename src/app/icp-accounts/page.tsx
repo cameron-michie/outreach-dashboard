@@ -113,52 +113,109 @@ export default function ICPAccountsPage() {
 
   const columns = [
     {
-      key: 'COMPANY_NAME',
-      label: 'Company',
-      render: (value: string, row: any) => (
-        <div>
-          <div className="font-medium text-gray-900">{value}</div>
-          <div className="text-sm text-gray-500">{row.USER_EMAIL}</div>
-          {(row.FIRST_NAME || row.LAST_NAME) && (
-            <div className="text-xs text-gray-400">
-              {[row.FIRST_NAME, row.LAST_NAME].filter(Boolean).join(' ')}
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: 'USE_CASE',
-      label: 'Use Case',
-      render: (value: string) => (
-        <div className="max-w-xs">
-          <div className="text-sm text-gray-900 truncate" title={value}>
-            {value || 'Not specified'}
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: 'SIGN_IN_COUNT',
-      label: 'Sign-ins',
+      key: 'ABLY_ACCOUNT_ID',
+      label: 'Account ID',
+      width: '120px',
       render: (value: number) => (
-        <span className="text-sm font-medium text-gray-900">{value}</span>
+        <a
+          href={`https://ably.com/admin/accounts/${value}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 underline font-medium"
+        >
+          {value}
+        </a>
+      ),
+    },
+    {
+      key: 'ABLY_USER_ID',
+      label: 'User ID',
+      width: '100px',
+      render: (value: number) => (
+        <a
+          href={`https://ably.com/admin/users/${value}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 underline font-medium"
+        >
+          {value}
+        </a>
+      ),
+    },
+    {
+      key: 'FIRST_NAME',
+      label: 'First Name',
+      width: '120px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
+      ),
+    },
+    {
+      key: 'LAST_NAME',
+      label: 'Last Name',
+      width: '120px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
+      ),
+    },
+    {
+      key: 'USER_EMAIL',
+      label: 'User Email',
+      width: '250px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value}</span>
+      ),
+    },
+    {
+      key: 'COMPANY_NAME',
+      label: 'Company Name',
+      width: '200px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
+      ),
+    },
+    {
+      key: 'DT_SIGN_UP',
+      label: 'Sign Up Date',
+      width: '120px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-500">
+          {value ? new Date(value).toLocaleDateString() : '-'}
+        </span>
       ),
     },
     {
       key: 'DT_SDK_CONNECT',
-      label: 'SDK Connected',
+      label: 'SDK Connect Date',
+      width: '140px',
       render: (value: string | null) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-          value ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-        }`}>
-          {value ? 'Yes' : 'No'}
+        <span className="text-sm text-gray-500">
+          {value ? new Date(value).toLocaleDateString() : '-'}
         </span>
+      ),
+    },
+    {
+      key: 'DT_LAST_SIGN_IN',
+      label: 'Last Sign In',
+      width: '130px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-500">
+          {value ? new Date(value).toLocaleDateString() : '-'}
+        </span>
+      ),
+    },
+    {
+      key: 'ACCOUNT_OWNER',
+      label: 'Account Owner',
+      width: '300px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
       ),
     },
     {
       key: 'CURRENT_PACKAGE_PAYMENT_PLAN',
       label: 'Package Plan',
+      width: '120px',
       render: (value: string) => (
         <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
           value === 'free_tier' ? 'bg-gray-100 text-gray-800' :
@@ -172,28 +229,107 @@ export default function ICPAccountsPage() {
       ),
     },
     {
-      key: 'ACCOUNT_OWNER',
-      label: 'Account Owner',
-      render: (value: any) => (
+      key: 'ICP_VALIDATED',
+      label: 'ICP Validated',
+      width: '120px',
+      render: (value: boolean) => (
         <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-          value && typeof value === 'string' && value.includes('(') ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+          value ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
         }`}>
-          {value && typeof value === 'string' && value.includes('(') ? 'Yes' : 'No'}
+          {value ? 'Yes' : 'No'}
         </span>
       ),
     },
     {
-      key: 'DT_LAST_SIGN_IN',
-      label: 'Last Sign In',
+      key: 'ICP_VALIDATED_DATE',
+      label: 'ICP Validated Date',
+      width: '150px',
       render: (value: string) => (
         <span className="text-sm text-gray-500">
-          {value ? new Date(value).toLocaleDateString() : 'Never'}
+          {value ? new Date(value).toLocaleDateString() : '-'}
         </span>
+      ),
+    },
+    {
+      key: 'USE_CASE',
+      label: 'Use Case',
+      width: '200px',
+      render: (value: string) => (
+        <div className="max-w-[200px]">
+          <span className="text-sm text-gray-900 break-words" title={value}>
+            {value || '-'}
+          </span>
+        </div>
+      ),
+    },
+    {
+      key: 'SIGN_IN_COUNT',
+      label: 'Sign-in Count',
+      width: '100px',
+      render: (value: number) => (
+        <span className="text-sm font-medium text-gray-900">{value}</span>
+      ),
+    },
+    {
+      key: 'NUM_WEBSITE_VISITS',
+      label: 'Website Visits',
+      width: '120px',
+      render: (value: number) => (
+        <span className="text-sm text-gray-900">{value || 0}</span>
+      ),
+    },
+    {
+      key: 'MESSAGES',
+      label: 'Messages',
+      width: '100px',
+      render: (value: number) => (
+        <span className="text-sm text-gray-900">{value || 0}</span>
+      ),
+    },
+    {
+      key: 'PEAK_CONNECTIONS',
+      label: 'Peak Connections',
+      width: '140px',
+      render: (value: number) => (
+        <span className="text-sm text-gray-900">{value || 0}</span>
+      ),
+    },
+    {
+      key: 'PEAK_CHANNELS',
+      label: 'Peak Channels',
+      width: '120px',
+      render: (value: number) => (
+        <span className="text-sm text-gray-900">{value || 0}</span>
+      ),
+    },
+    {
+      key: 'BRINGS_YOU_HERE',
+      label: 'Brings You Here',
+      width: '150px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
+      ),
+    },
+    {
+      key: 'WHOS_DEVELOPING',
+      label: 'Who\'s Developing',
+      width: '150px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
+      ),
+    },
+    {
+      key: 'SCALE_NEEDS',
+      label: 'Scale Needs',
+      width: '150px',
+      render: (value: string) => (
+        <span className="text-sm text-gray-900">{value || '-'}</span>
       ),
     },
     {
       key: 'actions',
       label: 'Actions',
+      width: '150px',
       render: (_: any, row: any) => (
         <div className="flex space-x-2">
           <Link href={`/campaigns/new?company=${encodeURIComponent(row.COMPANY_NAME)}&email=${encodeURIComponent(row.USER_EMAIL)}`}>
