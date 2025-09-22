@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Input, Loading, DataTable } from "@/components/ui";
+import { Button, Input, Loading } from "@/components/ui";
+import { TnksDataTable } from "@/components/ui/TnksDataTable";
 import { Header } from "@/components/ui/header";
 import { ProtectedRoute } from "@/components/auth";
 import { useSession } from "next-auth/react";
@@ -323,40 +324,26 @@ export default function ICPAccountsPage() {
                 <Loading />
               </div>
             ) : accounts.length > 0 ? (
-              <>
-                <DataTable
-                  data={accounts}
-                  columns={columns}
-                  loading={loading}
-                />
-
-                {/* Pagination */}
-                <div className="px-6 py-4 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-500">
-                      Page {currentPage} of {totalPages}
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={currentPage <= 1}
-                        onClick={() => fetchAccounts(currentPage - 1)}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={currentPage >= totalPages}
-                        onClick={() => fetchAccounts(currentPage + 1)}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </>
+              <TnksDataTable
+                data={accounts}
+                columns={columns}
+                loading={loading}
+                pagination={{
+                  page: currentPage,
+                  pageSize: 20,
+                  total: totalCount,
+                }}
+                onPageChange={(page) => fetchAccounts(page)}
+                onPageSizeChange={(pageSize) => {
+                  // Could implement dynamic page size if needed
+                  console.log('Page size change requested:', pageSize);
+                }}
+                selectable={true}
+                onSelectionChange={(selectedIds) => {
+                  console.log('Selection changed:', selectedIds);
+                }}
+                getRowId={(item) => item.ABLY_ACCOUNT_ID?.toString() || ''}
+              />
             ) : (
               <div className="p-6 text-center text-gray-500">
                 <p>No accounts found matching your filters.</p>

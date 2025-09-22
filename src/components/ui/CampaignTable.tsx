@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from "react";
-import { DataTable, Column } from "./DataTable";
+import { TnksDataTable } from "./TnksDataTable";
 import { Button } from "./button";
 import { Card } from "./Card";
 
@@ -156,12 +156,11 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
   selectedCampaigns = [],
   onSelectionChange,
 }) => {
-  const columns: Column<Campaign>[] = [
+  const columns = [
     {
-      id: "name",
-      header: "Campaign",
-      accessor: "name",
-      cell: (value, campaign) => (
+      key: "name",
+      label: "Campaign",
+      render: (value: string, campaign: Campaign) => (
         <div className="space-y-1">
           <div className="font-medium text-gray-900">{value}</div>
           <div className="text-xs text-gray-500">
@@ -170,50 +169,39 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
           <TagsList tags={campaign.tags} />
         </div>
       ),
-      width: "25%",
     },
     {
-      id: "status",
-      header: "Status",
-      accessor: "status",
-      cell: (value) => <StatusBadge status={value} />,
-      width: "10%",
-      align: "center",
+      key: "status",
+      label: "Status",
+      render: (value: Campaign['status']) => <StatusBadge status={value} />,
     },
     {
-      id: "type",
-      header: "Type",
-      accessor: "type",
-      cell: (value) => <TypeBadge type={value} />,
-      width: "10%",
-      align: "center",
+      key: "type",
+      label: "Type",
+      render: (value: Campaign['type']) => <TypeBadge type={value} />,
     },
     {
-      id: "progress",
-      header: "Progress",
-      cell: (_, campaign) => (
+      key: "progress",
+      label: "Progress",
+      render: (_: any, campaign: Campaign) => (
         <ProgressBar sent={campaign.sentCount} total={campaign.recipientCount} />
       ),
-      width: "15%",
-      sortable: false,
     },
     {
-      id: "metrics",
-      header: "Performance",
-      cell: (_, campaign) => (
+      key: "metrics",
+      label: "Performance",
+      render: (_: any, campaign: Campaign) => (
         <MetricsDisplay
           openRate={campaign.openRate}
           clickRate={campaign.clickRate}
           replyRate={campaign.replyRate}
         />
       ),
-      width: "15%",
-      sortable: false,
     },
     {
-      id: "dates",
-      header: "Timeline",
-      cell: (_, campaign) => (
+      key: "dates",
+      label: "Timeline",
+      render: (_: any, campaign: Campaign) => (
         <div className="space-y-1 text-xs">
           <div>
             <span className="text-gray-500">Start:</span>
@@ -231,8 +219,6 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
           </div>
         </div>
       ),
-      width: "15%",
-      sortable: false,
     },
   ];
 
@@ -281,27 +267,15 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
   );
 
   return (
-    <DataTable
+    <TnksDataTable
       data={campaigns}
       columns={columns}
       loading={loading}
-      error={error}
-      actions={actions}
-      emptyState={emptyState}
       selectable={true}
       selectedRows={selectedCampaigns}
       onSelectionChange={onSelectionChange}
       getRowId={(campaign) => campaign.id}
       onRowClick={onRowClick}
-      rowClickable={!!onRowClick}
-      getRowClassName={(campaign) => {
-        if (campaign.status === "archived") return "opacity-60";
-        if (campaign.status === "active") return "border-l-4 border-l-green-500";
-        return "";
-      }}
-      sortable={true}
-      filterable={true}
-      defaultSort={{ key: "lastModified", direction: "desc" }}
     />
   );
 };

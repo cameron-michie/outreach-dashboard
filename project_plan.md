@@ -8,13 +8,14 @@ A Next.js webapp for automated ICP (Ideal Customer Profile) outreach email campa
 
 ### Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 15.5.3 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui design system
 - **Backend**: Next.js API Routes (serverless functions)
 - **Database**: MongoDB Atlas (Free M0 tier) + Snowflake (via API)
 - **Real-time**: Ably LiveSync
 - **Authentication**: NextAuth.js with Google OAuth
 - **Email**: Gmail API
 - **AI**: Claude API (Anthropic)
+- **UI Components**: shadcn/ui with Radix UI primitives, Lucide React icons
 - **Deployment**: Vercel
 - **Scheduling**: Vercel Cron Jobs
 - **Testing**: Jest, React Testing Library, Playwright, Supertest
@@ -239,11 +240,11 @@ outreach-dashboard/
 
 #### 2.1 Snowflake Integration APIs
 
-- [ ] Create `/api/snowflake/icp-accounts` endpoint
-- [ ] Implement the existing ICP query from queries.py
-- [ ] Add filtering and pagination for ICP results
+- [x] Create `/api/snowflake/icp-accounts` endpoint
+- [x] Implement the existing ICP query from queries.py
+- [x] Add filtering and pagination for ICP results
 - [ ] Create `/api/snowflake/hubspot-data` endpoint for contact info
-- [ ] Add error handling and connection pooling
+- [x] Add error handling and connection pooling
 
 #### 2.2 Claude AI Integration
 
@@ -273,17 +274,17 @@ outreach-dashboard/
 
 #### 3.1 Core UI Components
 
-- [ ] Build reusable UI components (Button, Input, Modal, etc.)
-- [ ] Create layout components (Header, Sidebar, Navigation)
-- [ ] Implement responsive design system
-- [ ] Add loading states and error boundaries
-- [ ] Create data table components for campaign lists
+- [x] Build reusable UI components (Button, Input, Modal, etc.)
+- [x] Create layout components (Header, Sidebar, Navigation)
+- [x] Implement responsive design system with shadcn/ui
+- [x] Add loading states and error boundaries
+- [x] Create data table components for campaign lists (TnksDataTable, CampaignTable)
 
 #### 3.2 Dashboard Pages
 
-- [ ] Build main dashboard with campaign overview
-- [ ] Create ICP accounts list with filtering
-- [ ] Implement campaign creation flow
+- [x] Build main dashboard with campaign overview
+- [x] Create ICP accounts list with filtering (functional with Snowflake integration)
+- [x] Implement campaign creation flow (basic structure)
 - [ ] Add user management interface (admin only)
 - [ ] Build settings page for approval preferences
 

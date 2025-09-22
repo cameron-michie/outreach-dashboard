@@ -10,5 +10,4 @@ export { Sidebar } from "./Sidebar";
 export { Navigation, Breadcrumb, MobileNavigation } from "./Navigation";
 export { Layout, Page, Section } from "./Layout";
 export { Container, Grid, Flex, Stack, Show, useBreakpoint } from "./Grid";
-export { DataTable } from "./DataTable";
 export { CampaignTable, CampaignStats } from "./CampaignTable";
