@@ -43,25 +43,43 @@ export function Header() {
                   Dashboard
                 </Link>
                 <Link
+                  href="/campaigns"
+                  className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
+                >
+                  Campaigns
+                </Link>
+                <Link
+                  href="/icp-accounts"
+                  className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
+                >
+                  ICP Accounts
+                </Link>
+                <Link
+                  href="/templates"
+                  className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
+                >
+                  Templates
+                </Link>
+                <Link
                   href="/calendar"
                   className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
                 >
                   Calendar
                 </Link>
-                <Link
-                  href="/emails"
-                  className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
-                >
-                  Campaigns
-                </Link>
                 {session.user.role === 'admin' && (
                   <Link
-                    href="/settings"
+                    href="/admin/users"
                     className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
                   >
-                    Settings
+                    Users
                   </Link>
                 )}
+                <Link
+                  href="/settings"
+                  className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium"
+                >
+                  Settings
+                </Link>
               </nav>
             )}
           </div>

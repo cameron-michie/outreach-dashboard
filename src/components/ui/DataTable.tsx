@@ -143,6 +143,16 @@ const DataTable = <T extends Record<string, any>>({
 
   // Render cell content
   const renderCell = (column: Column<T>, item: T, index: number) => {
+    // Support for render function pattern (used in ICP accounts)
+    if (column.render) {
+      const fieldKey = column.key || column.id;
+      const value = fieldKey ? item[fieldKey] : item;
+      if (index === 0) {
+        console.log(`🔍 Rendering column ${fieldKey}:`, { value, item });
+      }
+      return column.render(value, item, index);
+    }
+
     if (column.cell) {
       const value = column.accessor
         ? typeof column.accessor === "function"
@@ -158,7 +168,9 @@ const DataTable = <T extends Record<string, any>>({
         : item[column.accessor];
     }
 
-    return null;
+    // Fallback to direct property access using key or id
+    const fieldKey = column.key || column.id;
+    return fieldKey ? item[fieldKey] : null;
   };
 
   const getSortIcon = (columnId: string) => {
@@ -282,7 +294,7 @@ const DataTable = <T extends Record<string, any>>({
                 )}
                 {columns.map((column) => (
                   <th
-                    key={column.id}
+                    key={column.key || column.id}
                     className={cn(
                       "px-4 py-3 text-sm font-medium text-gray-900",
                       column.align === "center" && "text-center",
@@ -290,11 +302,11 @@ const DataTable = <T extends Record<string, any>>({
                       column.sortable !== false && sortable && "cursor-pointer hover:bg-gray-100"
                     )}
                     style={{ width: column.width }}
-                    onClick={() => column.sortable !== false && sortable && handleSort(column.id)}
+                    onClick={() => column.sortable !== false && sortable && handleSort(column.key || column.id)}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>{column.header}</span>
-                      {column.sortable !== false && sortable && getSortIcon(column.id)}
+                      <span>{column.header || column.label}</span>
+                      {column.sortable !== false && sortable && getSortIcon(column.key || column.id)}
                     </div>
                   </th>
                 ))}
@@ -344,7 +356,7 @@ const DataTable = <T extends Record<string, any>>({
                       )}
                       {columns.map((column) => (
                         <td
-                          key={column.id}
+                          key={column.key || column.id}
                           className={cn(
                             "px-4 py-3 text-sm text-gray-900",
                             column.align === "center" && "text-center",

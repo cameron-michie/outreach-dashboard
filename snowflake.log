@@ -37,3 +37,76 @@
 {"level":"INFO","message":"[4:20:01.307 PM]: Easy Logging is disabled as no config has been found"}
 {"level":"INFO","message":"[4:20:05.198 PM]: Connection[id: 3ddc4988-61a2-4251-9eae-977620ad745d] - authentication successful using: EXTERNALBROWSER"}
 {"level":"INFO","message":"[4:20:05.203 PM]: Connection[id: 3ddc4988-61a2-4251-9eae-977620ad745d] - connected successfully after 3898.0872959997505 milliseconds"}
+{"level":"INFO","message":"[11:20:39.873 AM]: Creating new connection object"}
+{"level":"INFO","message":"[11:20:39.890 AM]: Creating Connection[id: 3d757445-7e79-406d-8705-2c623b81da40] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[11:20:39.891 AM]: Connection[id: 3d757445-7e79-406d-8705-2c623b81da40] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[11:20:39.891 AM]: Connection[id: 3d757445-7e79-406d-8705-2c623b81da40] - connection object created successfully."}
+{"level":"INFO","message":"[11:20:39.892 AM]: Connection[id: 3d757445-7e79-406d-8705-2c623b81da40] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[11:20:39.893 AM]: Trying to initialize Easy Logging"}
+{"level":"INFO","message":"[11:20:39.897 AM]: No client config detected."}
+{"level":"INFO","message":"[11:20:39.897 AM]: No config file path found. Client config will not be used."}
+{"level":"INFO","message":"[11:20:39.897 AM]: Easy Logging is disabled as no config has been found"}
+{"level":"INFO","message":"[11:21:10.956 AM]: Connection[id: 3d757445-7e79-406d-8705-2c623b81da40] - authentication successful using: EXTERNALBROWSER"}
+{"level":"INFO","message":"[11:21:10.959 AM]: Connection[id: 3d757445-7e79-406d-8705-2c623b81da40] - connected successfully after 31067.102618999896 milliseconds"}
+{"level":"INFO","message":"[11:23:51.976 AM]: Creating new connection object"}
+{"level":"INFO","message":"[11:23:51.994 AM]: Creating Connection[id: 32bc33fb-0b45-4d71-8a51-4121b2479adf] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[11:23:51.994 AM]: Connection[id: 32bc33fb-0b45-4d71-8a51-4121b2479adf] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[11:23:51.995 AM]: Connection[id: 32bc33fb-0b45-4d71-8a51-4121b2479adf] - connection object created successfully."}
+{"level":"INFO","message":"[11:23:51.996 AM]: Connection[id: 32bc33fb-0b45-4d71-8a51-4121b2479adf] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[11:23:51.996 AM]: Trying to initialize Easy Logging"}
+{"level":"INFO","message":"[11:23:51.999 AM]: No client config detected."}
+{"level":"INFO","message":"[11:23:51.999 AM]: No config file path found. Client config will not be used."}
+{"level":"INFO","message":"[11:23:52.000 AM]: Easy Logging is disabled as no config has been found"}
+{"level":"INFO","message":"[11:24:05.472 AM]: Connection[id: 32bc33fb-0b45-4d71-8a51-4121b2479adf] - authentication successful using: EXTERNALBROWSER"}
+{"level":"INFO","message":"[11:24:05.475 AM]: Connection[id: 32bc33fb-0b45-4d71-8a51-4121b2479adf] - connected successfully after 13479.74809899996 milliseconds"}
+{"level":"INFO","message":"[11:24:43.631 AM]: Creating new connection object"}
+{"level":"INFO","message":"[11:24:43.648 AM]: Creating Connection[id: e01f361c-f84e-4dad-a2e5-883a5b1116d4] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[11:24:43.648 AM]: Connection[id: e01f361c-f84e-4dad-a2e5-883a5b1116d4] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[11:24:43.649 AM]: Connection[id: e01f361c-f84e-4dad-a2e5-883a5b1116d4] - connection object created successfully."}
+{"level":"INFO","message":"[11:24:43.649 AM]: Connection[id: e01f361c-f84e-4dad-a2e5-883a5b1116d4] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[11:24:43.650 AM]: Trying to initialize Easy Logging"}
+{"level":"INFO","message":"[11:24:43.653 AM]: No client config detected."}
+{"level":"INFO","message":"[11:24:43.654 AM]: No config file path found. Client config will not be used."}
+{"level":"INFO","message":"[11:24:43.654 AM]: Easy Logging is disabled as no config has been found"}
+{"level":"INFO","message":"[11:24:51.469 AM]: Connection[id: e01f361c-f84e-4dad-a2e5-883a5b1116d4] - authentication successful using: EXTERNALBROWSER"}
+{"level":"INFO","message":"[11:24:51.472 AM]: Connection[id: e01f361c-f84e-4dad-a2e5-883a5b1116d4] - connected successfully after 7822.090670000063 milliseconds"}
+{"level":"INFO","message":"[2:51:30.187 PM]: Creating new connection object"}
+{"level":"INFO","message":"[2:51:30.200 PM]: Creating Connection[id: 34796cc0-e229-4d3c-bc5c-ac7708d7da0f] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[2:51:30.201 PM]: Connection[id: 34796cc0-e229-4d3c-bc5c-ac7708d7da0f] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[2:51:30.202 PM]: Connection[id: 34796cc0-e229-4d3c-bc5c-ac7708d7da0f] - connection object created successfully."}
+{"level":"INFO","message":"[2:51:30.203 PM]: Connection[id: 34796cc0-e229-4d3c-bc5c-ac7708d7da0f] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[2:51:30.203 PM]: Trying to initialize Easy Logging"}
+{"level":"INFO","message":"[2:51:30.205 PM]: No client config detected."}
+{"level":"INFO","message":"[2:51:30.205 PM]: No config file path found. Client config will not be used."}
+{"level":"INFO","message":"[2:51:30.206 PM]: Easy Logging is disabled as no config has been found"}
+{"level":"INFO","message":"[2:51:33.966 PM]: Connection[id: 34796cc0-e229-4d3c-bc5c-ac7708d7da0f] - authentication successful using: EXTERNALBROWSER"}
+{"level":"INFO","message":"[2:51:33.969 PM]: Connection[id: 34796cc0-e229-4d3c-bc5c-ac7708d7da0f] - connected successfully after 3766.647149000317 milliseconds"}
+{"level":"INFO","message":"[9:10:24.111 AM]: Creating new connection object"}
+{"level":"INFO","message":"[9:10:24.132 AM]: Creating Connection[id: c200a6e5-6f66-42b5-84a3-71a8231b1609] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[9:10:24.133 AM]: Connection[id: c200a6e5-6f66-42b5-84a3-71a8231b1609] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[9:10:24.133 AM]: Connection[id: c200a6e5-6f66-42b5-84a3-71a8231b1609] - connection object created successfully."}
+{"level":"INFO","message":"[9:10:24.135 AM]: Connection[id: c200a6e5-6f66-42b5-84a3-71a8231b1609] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[9:10:24.137 AM]: Trying to initialize Easy Logging"}
+{"level":"INFO","message":"[9:10:24.142 AM]: No client config detected."}
+{"level":"INFO","message":"[9:10:24.143 AM]: No config file path found. Client config will not be used."}
+{"level":"INFO","message":"[9:10:24.143 AM]: Easy Logging is disabled as no config has been found"}
+{"level":"INFO","message":"[9:10:34.756 AM]: Creating new connection object"}
+{"level":"INFO","message":"[9:10:34.757 AM]: Creating Connection[id: b316d355-0955-4fa8-b6c3-23f9aef28e3f] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[9:10:34.758 AM]: Connection[id: b316d355-0955-4fa8-b6c3-23f9aef28e3f] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[9:10:34.758 AM]: Connection[id: b316d355-0955-4fa8-b6c3-23f9aef28e3f] - connection object created successfully."}
+{"level":"INFO","message":"[9:10:34.758 AM]: Connection[id: b316d355-0955-4fa8-b6c3-23f9aef28e3f] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[9:11:03.751 AM]: Connection[id: b316d355-0955-4fa8-b6c3-23f9aef28e3f] - authentication successful using: EXTERNALBROWSER"}
+{"level":"INFO","message":"[9:11:03.760 AM]: Connection[id: b316d355-0955-4fa8-b6c3-23f9aef28e3f] - connected successfully after 29001.436055988073 milliseconds"}
+{"level":"INFO","message":"[9:12:25.356 AM]: Connection[id: c200a6e5-6f66-42b5-84a3-71a8231b1609] - failed to connect async after 120962.43346297741 milliseconds.Failed during authentication. Error: Error: Error while getting SAML token: Browser action timed out after 120000 ms.\n    at <unknown> (../../../lib/authentication/auth_web.js:107:13)\n    at async AuthWeb.authenticate (../../../lib/authentication/auth_web.js:102:30)\n    at async Connection.connectAsync (../../../lib/connection/connection.js:540:7)"}
+{"level":"ERROR","message":"[9:12:25.373 AM]: Connection[id: c200a6e5-6f66-42b5-84a3-71a8231b1609] - failed during authentication. Error: Error: Error while getting SAML token: Browser action timed out after 120000 ms.\n    at <unknown> (../../../lib/authentication/auth_web.js:107:13)\n    at async AuthWeb.authenticate (../../../lib/authentication/auth_web.js:102:30)\n    at async Connection.connectAsync (../../../lib/connection/connection.js:540:7)"}
+{"level":"INFO","message":"[9:21:11.185 AM]: Creating new connection object"}
+{"level":"INFO","message":"[9:21:11.205 AM]: Creating Connection[id: 5d86eff4-6d00-40fe-97cc-2b62950b3d80] with host: hk06212.eu-west-1.snowflakecomputing.com, account: hk06212, accessUrl: https://hk06212.eu-west-1.snowflakecomputing.com, user: CAMERON.MICHIE@ABLY.COM, role: undefined, database: ABLY_ANALYTICS_PRODUCTION, schema: MODELLED_COMMERCIAL, warehouse: VW_CLIENTS_PRODUCTION, proxy was not configured, password is not provided, region: eu-west-1, authenticator: EXTERNALBROWSER, ocsp mode: FAIL_OPEN, os: darwin, os version: 24.6.0"}
+{"level":"INFO","message":"[9:21:11.206 AM]: Connection[id: 5d86eff4-6d00-40fe-97cc-2b62950b3d80] additional details: passcode in password is provided, passcode is not provided, private key is not provided, application: undefined, client name: snowflake-sdk, client version: 2.2.0, retry timeout: 300, private key path: undefined, private key pass is not provided, client store temporary credential: false, browser response timeout: 120000"}
+{"level":"INFO","message":"[9:21:11.207 AM]: Connection[id: 5d86eff4-6d00-40fe-97cc-2b62950b3d80] - connection object created successfully."}
+{"level":"INFO","message":"[9:21:11.208 AM]: Connection[id: 5d86eff4-6d00-40fe-97cc-2b62950b3d80] - async connecting. Associated Snowflake domain: GLOBAL"}
+{"level":"INFO","message":"[9:21:11.208 AM]: Trying to initialize Easy Logging"}
+{"level":"INFO","message":"[9:21:11.212 AM]: No client config detected."}
+{"level":"INFO","message":"[9:21:11.213 AM]: No config file path found. Client config will not be used."}
+{"level":"INFO","message":"[9:21:11.213 AM]: Easy Logging is disabled as no config has been found"}
+{"level":"INFO","message":"[9:21:16.837 AM]: Connection[id: 5d86eff4-6d00-40fe-97cc-2b62950b3d80] - authentication successful using: EXTERNALBROWSER"}
+{"level":"INFO","message":"[9:21:16.854 AM]: Connection[id: 5d86eff4-6d00-40fe-97cc-2b62950b3d80] - connected successfully after 5646.61167499423 milliseconds"}

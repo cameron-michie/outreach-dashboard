@@ -40,11 +40,36 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const campaigns = await EmailCampaignModel.findPaginated(filters, page, limit);
+    // Get all campaigns first, then filter and paginate manually
+    let allCampaigns = await EmailCampaignModel.findAll(filters);
 
-    console.log(`✅ Retrieved ${campaigns.data.length} campaigns (${campaigns.total} total)`);
+    // Apply additional filters
+    if (status) {
+      allCampaigns = allCampaigns.filter(campaign => campaign.status === status);
+    }
 
-    return NextResponse.json(campaigns);
+    // Calculate pagination
+    const total = allCampaigns.length;
+    const totalPages = Math.ceil(total / limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedCampaigns = allCampaigns.slice(startIndex, endIndex);
+
+    const result = {
+      data: paginatedCampaigns,
+      pagination: {
+        page,
+        limit,
+        total_count: total,
+        total_pages: totalPages,
+        has_next_page: page < totalPages,
+        has_prev_page: page > 1,
+      },
+    };
+
+    console.log(`✅ Retrieved ${paginatedCampaigns.length} campaigns (${total} total)`);
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error('❌ Campaigns API error:', error);
     return NextResponse.json(
